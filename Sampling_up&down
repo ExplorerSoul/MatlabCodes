@@ -1,0 +1,72 @@
+% Input sequence
+x = [2,2,1,4,1,2,7];
+n = length(x);
+factor = 2;
+ds_length_sequence = floor(n / factor);
+ds_sequence = zeros(1, ds_length_sequence);
+us_length_sequence = n * factor;
+us_sequence = zeros(1, us_length_sequence);
+% for downsampled sequence
+for i = 1:ds_length_sequence
+    ds_sequence(i) = x((i-1) * factor + 1);
+end
+% for upsampled sequence
+for i = 1:n
+    us_sequence((i-1) * factor + 1) = x(i);
+end
+
+% sine wave
+Fs = 50; % Original sampling frequency
+t = 0:1/Fs:1; % Time vector
+f = 5; % Frequency of the sine wave
+y = sin(2 * pi * f * t); % Sine wave
+m = length(y);
+us_length_sine = n * factor;
+us_sine = zeros(1, us_length_sine);
+ds_length_sine = floor(m / factor);
+ds_sine = zeros(1, ds_length_sine);
+
+% Fill in the downsampled sequence
+for i = 1:ds_length_sine
+    ds_sine(i) = y((i-1) * factor + 1);
+end
+
+% Time vector for downsampled signal
+t_ds = 0:1/(Fs/factor):(ds_length_sine-1)/(Fs/factor);
+
+
+% Fill in the upsampled sequence
+for i = 1:m
+    us_sine((i-1) * factor + 1) = y(i);
+end
+
+% Time vector for upsampled signal
+t_us = 0:1/(Fs*factor):1;
+
+
+
+figure
+subplot(3, 2, 1);
+stem(x);
+title('Original Sequence');
+
+subplot(3, 2, 3);
+stem(us_sequence);
+title('Upsampled Sequence');
+
+subplot(3, 2, 5);
+stem(ds_sequence);
+title('Downsampled Sequence');
+
+subplot(3, 2, 2);
+stem(t, y);
+title('Original Sine Wave');
+
+subplot(3, 2, 4);
+stem(t_us, us_sine);
+title('Upsampled Sine Wave');
+
+subplot(3, 2, 6);
+stem(t_ds, ds_sine);
+title('Downsampled Sine Wave');
+
