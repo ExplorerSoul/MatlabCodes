@@ -1,0 +1,68 @@
+rp = 0.01;  % Passband ripple (in linear scale)
+rs = 0.001; % Stopband ripple (in linear scale)
+fp = 1000;  % Passband frequency in Hz
+fs = 1500;  % Stopband frequency in Hz
+f = 8000;   % Sampling frequency in Hz
+
+% Normalized cutoff frequencies
+wp = 2 * fp / f; % Normalized passband frequency
+ws = 2 * fs / f; % Normalized stopband frequency
+
+% Calculate filter order
+num = -20 * log10(sqrt(rp * rs)) - 13;
+dem = 14.6 * (fs - fp) / f;
+n = ceil(num / dem);
+n1 = n + 1;
+
+% Ensure the filter order is even
+if rem(n, 2) ~= 0
+    n1 = n;
+    n = n - 1;
+end
+
+% Apply Hamming window
+y = hamming(n1);
+
+% Low-pass filter
+b_lp = fir1(n, wp, 'low', y);
+[h_lp, om_lp] = freqz(b_lp, 1, 256);
+m_lp = 20 * log10(abs(h_lp));
+subplot(2, 2, 1);
+plot(om_lp/pi, m_lp);
+ylabel('Gain in dB');
+xlabel('Normalized Frequency');
+title('Low-pass Filter');
+
+% High-pass filter
+b_hp = fir1(n, wp, 'high', y);
+[h_hp, om_hp] = freqz(b_hp, 1, 256);
+m_hp = 20 * log10(abs(h_hp));
+subplot(2, 2, 2);
+plot(om_hp/pi, m_hp);
+ylabel('Gain in dB');
+xlabel('Normalized Frequency');
+title('High-pass Filter');
+
+% Band-pass filter
+wn_bp = [wp ws]; % Bandpass frequencies
+b_bp = fir1(n, wn_bp, 'bandpass', y);
+[h_bp, om_bp] = freqz(b_bp, 1, 256);
+m_bp = 20 * log10(abs(h_bp));
+subplot(2, 2, 3);
+plot(om_bp/pi, m_bp);
+ylabel('Gain in dB');
+xlabel('Normalized Frequency');
+title('Band-pass Filter');
+
+% Band-stop filter
+b_bs = fir1(n, wn_bp, 'stop', y);
+[h_bs, om_bs] = freqz(b_bs, 1, 256);
+m_bs = 20 * log10(abs(h_bs));
+subplot(2, 2, 4);
+plot(om_bs/pi, m_bs);
+ylabel('Gain in dB');
+xlabel('Normalized Frequency');
+title('Band-stop Filter');
+
+% Adjust layout for better visibility
+sgtitle('FIR Filter Frequency Responses using Hamming window'); % Add a super title for clarity
