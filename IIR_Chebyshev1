@@ -1,0 +1,55 @@
+Fs = 1000; % Sampling frequency
+f_cut_low = 120; % Cut-off frequency for low-pass & high-pass (Hz)
+f_cut_band = [170, 270]; % Cut-off freqs for band-pass & band-stop (Hz)
+order = 4; % Filter order
+
+% Create a new figure for the plots
+figure;
+
+% Chebyshev I Low-Pass Filter
+subplot(2, 2, 1);
+[b_cheby1_lp, a_cheby1_lp] = cheby1(order, 20, f_cut_low/(Fs/2), 'low');
+[h_cheby1_lp, f] = freqz(b_cheby1_lp, a_cheby1_lp, 1024, Fs);
+plot(f, 20*log10(abs(h_cheby1_lp)), 'k'); % Black color
+title('Chebyshev I Low-Pass Filter');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude (dB)');
+grid on;
+xline(f_cut_low, '--r', 'Cutoff', 'LabelVerticalAlignment', 'middle');
+
+% Chebyshev I High-Pass Filter
+subplot(2, 2, 2);
+[b_cheby1_hp, a_cheby1_hp] = cheby1(order, 20, f_cut_low/(Fs/2), 'high'); % Corrected here
+[h_cheby1_hp, ~] = freqz(b_cheby1_hp, a_cheby1_hp, 1024, Fs);
+plot(f, 20*log10(abs(h_cheby1_hp)), 'k'); % Black color
+title('Chebyshev I High-Pass Filter');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude (dB)');
+grid on;
+xline(f_cut_low, '--r', 'Cutoff', 'LabelVerticalAlignment', 'middle');
+
+% Chebyshev I Band-Pass Filter
+subplot(2, 2, 3);
+[b_cheby1_bp, a_cheby1_bp] = cheby1(order, 1, f_cut_band/(Fs/2), 'bandpass');
+[h_cheby1_bp, ~] = freqz(b_cheby1_bp, a_cheby1_bp, 1024, Fs);
+plot(f, 20*log10(abs(h_cheby1_bp)), 'k'); % Black color
+title('Chebyshev I Band-Pass Filter');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude (dB)');
+grid on;
+xline(f_cut_band(1), '--r', 'Cutoff 1', 'LabelVerticalAlignment', 'middle');
+xline(f_cut_band(2), '--r', 'Cutoff 2', 'LabelVerticalAlignment', 'middle');
+
+% Chebyshev I Band-Stop Filter
+subplot(2, 2, 4);
+[b_cheby1_bs, a_cheby1_bs] = cheby1(order, 20, f_cut_band/(Fs/2), 'stop');
+[h_cheby1_bs, ~] = freqz(b_cheby1_bs, a_cheby1_bs, 1024, Fs);
+plot(f, 20*log10(abs(h_cheby1_bs)), 'k'); % Black color
+title('Chebyshev I Band-Stop Filter');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude (dB)');
+grid on;
+xline(f_cut_band(1), '--r', 'Cutoff 1', 'LabelVerticalAlignment', 'middle');
+xline(f_cut_band(2), '--r', 'Cutoff 2', 'LabelVerticalAlignment', 'middle');
+
+sgtitle('Chebyshev I Filter Frequency Responses', 'FontWeight', 'bold');
