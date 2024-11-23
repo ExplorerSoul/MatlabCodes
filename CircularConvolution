@@ -1,0 +1,41 @@
+clc;
+clear all;
+close all;
+x= [2,2,1,4];
+h= [1,3,4];
+l1=length(x);
+l2=length(h);
+N = l1+l2-1;
+x=[x zeros(1,(N-l1))];
+h=[h zeros(1,(N-l2))];
+y = zeros(1,N);
+for n=1:N
+    
+    for k=1:N
+        y(n)=y(n)+x(k)*h(mod((n-k),N)+1);
+    end
+end
+disp('The Circular Convolution of the two given Sequences:');
+figure;
+subplot(4,1,1);
+stem(x);
+xlabel('Time->');
+ylabel('Amplitude->');
+title('First Sequence x[n]');
+subplot(4,1,2);
+stem(h);
+xlabel('Time->');
+ylabel('Amplitude->');
+title('Second Sequence h[n]');
+subplot(4,1,3);
+stem(y);
+xlabel('Time->');
+ylabel('Amplitude->');
+title('Circular Convolution y[n]');
+ib = cconv(x,h,N);
+subplot(4,1,4);
+stem(ib);
+xlabel('Time->');
+ylabel('Amplitude->');
+title('MATLAB circular convolution result');
+disp(y);
