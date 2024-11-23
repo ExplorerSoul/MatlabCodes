@@ -1,0 +1,71 @@
+rp = 0.01;rs = 0.001;
+fp = 1000;fs = 1500;f = 8000;
+wp = 2 * fp / f;
+ws = 2 * fs / f;
+% Calculate filter order
+num = -20 * log10(sqrt(rp * rs)) - 13;
+dem = 14.6 * (fs - fp) / f;
+n = ceil(num / dem);
+n1 = n + 1;
+if rem(n, 2) ~= 0
+    n1 = n;
+    n = n - 1;
+end
+% Apply Blackman window
+y = blackman(n1);
+% Low-pass filter
+b = fir1(n, wp, 'low', y);
+[h, om] = freqz(b, 1, 256);
+m = 20 * log10(abs(h));
+subplot(2, 2, 1);
+plot(om/pi, m, 'b'); % Black color
+hold on;
+xline(wp, 'k--'); % Dotted line at cutoff
+text(wp, -10, 'f1', 'HorizontalAlignment', 'center'); 
+ylabel('Gain in dB');
+xlabel('Normalized Frequency');
+title('Low-pass Filter');
+% High-pass filter
+b = fir1(n, wp, 'high', y);
+[h, om] = freqz(b, 1, 256);
+m = 20 * log10(abs(h));
+subplot(2, 2, 2);
+plot(om/pi, m, 'b'); % Black color
+hold on;
+xline(wp, 'k--'); % Dotted line at cutoff
+text(wp, -10, 'f1', 'HorizontalAlignment', 'center');
+ylabel('Gain in dB');
+xlabel('Normalized Frequency');
+title('High-pass Filter');
+% Band-pass filter
+wn = [wp ws];
+b = fir1(n, wn, 'bandpass', y);
+[h, om] = freqz(b, 1, 256);
+m = 20 * log10(abs(h));
+subplot(2, 2, 3);
+plot(om/pi, m, 'b'); % Black color
+hold on;
+xline(wp, 'k--'); % Lower cutoff
+xline(ws, 'k--'); % Upper cutoff
+text(wp, -10, 'f1', 'HorizontalAlignment', 'center'); 
+text(ws, -10, 'f2', 'HorizontalAlignment', 'center');
+ylabel('Gain in dB');
+xlabel('Normalized Frequency');
+title('Band-pass Filter');
+% Band-stop filter
+b = fir1(n, wn, 'stop', y);
+[h, om] = freqz(b, 1, 256);
+m = 20 * log10(abs(h));
+subplot(2, 2, 4);
+plot(om/pi, m, 'b'); % Black color
+hold on;
+xline(wp, 'k--'); % Lower cutoff
+xline(ws, 'k--'); % Upper cutoff
+text(wp, -10, 'f1', 'HorizontalAlignment', 'center'); 
+text(ws, -10, 'f2', 'HorizontalAlignment', 'center');
+ylabel('Gain in dB');
+xlabel('Normalized Frequency');
+title('Band-stop Filter');
+
+% Adjust layout for better visibility
+sgtitle('FIR Filter Frequency Responses using Blackman window');
