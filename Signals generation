@@ -1,0 +1,48 @@
+
+t = -5:1:5;
+f = 1;
+sine = sin(2*pi*f*t);
+unit = t>=0;
+ramp = t.*unit;
+expo = exp(t);
+imp = t==0;
+cose = cos(2*pi*f*t);
+
+figure
+
+subplot(6,2,1)
+plot(t,ramp)
+title('analog ramp')
+subplot(6,2,2)
+stem(t, ramp)
+title('digital ramp')
+subplot(6,2,3)
+plot(t,unit)
+title('analog unit')
+subplot(6,2,4)
+stem(t, unit)
+title('digital unit')
+subplot(6,2,5)
+plot(t,sine)
+title('analog sine')
+subplot(6,2,6)
+stem(t, sine)
+title('digital sine')
+subplot(6,2,7)
+plot(t,expo)
+title('analog exponential')
+subplot(6,2,8)
+stem(t, expo)
+title('digital exponential')
+subplot(6,2,9)
+plot(t,imp)
+title('analog impulse')
+subplot(6,2,10)
+stem(t, imp)
+title('digital impulse')
+subplot(6,2,11)
+plot(t,cose)
+title('analog cosine')
+subplot(6,2,12)
+stem(t, cose)
+title('digital cosine')
