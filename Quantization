@@ -1,0 +1,32 @@
+clc;
+clear all;
+close all;
+Fs = 1000;
+t = 0:1/Fs:1;
+x = sin(2*pi*5*t);
+% Quantization parameters
+levels = 5;
+min_val = min(x);
+max_val = max(x);
+step_size = (max_val - min_val)/levels;
+% Custom quantization function
+quantized_signal = min_val + step_size * round((x-min_val)/step_size);
+% Compute the quantization error
+error_signal = x-quantized_signal;
+% Plot the original signal, quantized signal and error signal
+figure;
+subplot(3,1,1);
+plot(t,x,'b');
+title('Original Signal');
+xlabel('Time');
+ylabel('Amplitude');
+subplot(3,1,2);
+plot(t,quantized_signal,'r');
+title('Quantized Signal');
+xlabel('Time');
+ylabel('Amplitude');
+subplot(3,1,3);
+plot(t,error_signal,'k');
+title('Quantization Error');
+xlabel('Time');
+ylabel('Amplitude');
