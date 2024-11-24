@@ -6,7 +6,7 @@ order = 4; % Filter order
 %Butterworth Low-pass Filter
 subplot(2, 2, 1);
 [b_lp, a_lp] = butter(order, f_cut_low/(Fs/2), 'low');
-[h_lp, f] = freqz(b_lp, a_lp, 1024, Fs);
+[h_lp, f] = freqz(b_lp, a_lp, 1024, Fs); % if it not run then write [h_lp, ~]
 plot(f, 20*log10(abs(h_lp)), 'k'); % Black color
 title('Butterworth Low-Pass Filter');
 xlabel('Frequency (Hz)');
