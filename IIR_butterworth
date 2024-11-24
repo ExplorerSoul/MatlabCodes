@@ -47,6 +47,6 @@ xlabel('Frequency (Hz)');
 ylabel('Magnitude (dB)');
 grid on;
 xline(f_cut_band(1), '--r', 'Cutoff 1', 'LabelVerticalAlignment','middle');
-xline(f_cut_band(1), '--r', 'Cutoff 1', 'LabelVerticalAlignment','middle');
+xline(f_cut_band(2), '--r', 'Cutoff 2', 'LabelVerticalAlignment','middle');
 
 sgtitle('Butterworth Filter Frequency Responces', 'FontWeight', 'bold');
